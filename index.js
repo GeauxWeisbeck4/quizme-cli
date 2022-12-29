@@ -1,4 +1,4 @@
-import readline from "node:readline";
+import readline from "node:readline/promises";
 
 const rl = readline.createInterface({
   terminal: true,
@@ -6,15 +6,17 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-console.log("What is your name?");
+const answer = await rl.question("What is your name?");
 
-let inmput = "";
+console.log(`Your name is ${answer}`);
 
-rl.input.on("keypress", (event, rl) => {
-  console.log(event, rl)
-})
+rl.close();
 
-console.log(process.argv);
+const answer2 = await rl.qustion("Where do you live?")
+
+console.log(`You live in ${answer2}.`);
+
+rl.close();
 
 // const flags = [];
 
