@@ -1,22 +1,46 @@
-import readline from "node:readline/promises";
+import inquirer from "inquirer";
 
-const rl = readline.createInterface({
-  terminal: true,
-  input: process.stdin,
-  output: process.stdout,
+const flags = [];
+process.argv.forEach((arg) => {
+  if(/^-/.test(arg)) {
+    flags.push(arg.replaceAll("-", ""));
+  }
 });
 
-const answer = await rl.question("What is your name?");
+if(flags.includes("a") || flags.includes("add")) {
+  addQuestion();
+} else {
+  askQuestion();
+}
 
-console.log(`Your name is ${answer}`);
+async function askQuestion() {
+  const answers = await inquirer.prompt([
+    {
+      type: "input",
+      name: "name",
+      message: "What is your name?"
+    },
+    {
+      type: "input",
+      name: "live",
+      message: "Where do you live?",
+      choices: ["Raleigh", "Bozeman", "Helena", "Lincoln"]
+    },
+  ]);
 
-rl.close();
+  console.log(`Your name is ${answers.name}`);
+  console.log(`You live in ${answers.live}.`);
+}
 
-const answer2 = await rl.qustion("Where do you live?")
+// const rl = readline.createInterface({
+//   terminal: true,
+//   input: process.stdin,
+//   output: process.stdout,
+// });
 
-console.log(`You live in ${answer2}.`);
 
-rl.close();
+
+
 
 // const flags = [];
 
