@@ -1,10 +1,19 @@
-const http = require('http')
+console.log(process.argv);
 
-module.exports = {
-  name: "Andrew"
-};
+const flags = [];
 
-// ECMAScript MOdules
-import http from "http";
+process.argv.forEach((arg) => {
+  if(/^-/.test(arg)) {
+    flags.push(arg.replaceAll("-", ""));
+  }
+});
 
-export const name = "Andrew";
+console.log(flags);
+
+if(flags.includes("a") || flags.includes("add")) {
+  console.log("add some values");
+} else {
+  console.log("Do some work");
+}
+
+console.log(process.argv)
