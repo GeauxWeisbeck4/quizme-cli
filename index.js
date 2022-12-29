@@ -1,4 +1,5 @@
 import inquirer from "inquirer";
+import fs from "node:fs/promise"
 
 const flags = [];
 process.argv.forEach((arg) => {
@@ -14,22 +15,20 @@ if(flags.includes("a") || flags.includes("add")) {
 }
 
 async function askQuestion() {
+  const data = await fs.readFile("./data.json");
+  const parsedData = JSON.parse(data.toString());
+
+  const { question, answer } = parsedData[0]
+
   const answers = await inquirer.prompt([
-    {
-      type: "input",
-      name: "name",
-      message: "What is your name?"
-    },
-    {
-      type: "input",
-      name: "live",
-      message: "Where do you live?",
-      choices: ["Raleigh", "Bozeman", "Helena", "Lincoln"]
-    },
+    { type: "input", name: "pyramid", message: question}
   ]);
 
-  console.log(`Your name is ${answers.name}`);
-  console.log(`You live in ${answers.live}.`);
+  if (answers.pyramid === answer) {
+    console.log("That's right!");
+  } else {
+    console.log("Not this time!");
+  }
 }
 
 // const rl = readline.createInterface({
