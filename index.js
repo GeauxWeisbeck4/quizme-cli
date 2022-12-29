@@ -1,5 +1,6 @@
 import inquirer from "inquirer";
-import fs from "node:fs/promise"
+import fs from "node:fs/promises";
+import { isBoxedPrimitive } from "node:util/types";
 
 const flags = [];
 process.argv.forEach((arg) => {
@@ -8,53 +9,47 @@ process.argv.forEach((arg) => {
   }
 });
 
+console.log(flags);
+
 if(flags.includes("a") || flags.includes("add")) {
   addQuestion();
 } else {
   askQuestion();
 }
 
+console.log(process.argv);
+
 async function askQuestion() {
   const data = await fs.readFile("./data.json");
   const parsedData = JSON.parse(data.toString());
 
-  const { question, answer } = parsedData[0]
+  const target = parsedData[0];
+
+  const { question, answer } = target;
 
   const answers = await inquirer.prompt([
-    { type: "input", name: "pyramid", message: question}
+    {
+      type: "input",
+      name: "useranswer",
+      message: question
+    },
   ]);
 
-  if (answers.pyramid === answer) {
-    console.log("That's right!");
-  } else {
-    console.log("Not this time!");
-  }
+  target.lastAnsweredCorrect = checkAnswer(answers.useranswer, answer);
+  target.lastAsked = Date().toString();
+
+  const newData = parsedData.filter((item) => item.id !== target.id)
+  newData.push(target)
+
+  await fs.writeFile("./data.json", JSON.stringify(newData))
 }
 
-// const rl = readline.createInterface({
-//   terminal: true,
-//   input: process.stdin,
-//   output: process.stdout,
-// });
-
-
-
-
-
-// const flags = [];
-
-// process.argv.forEach((arg) => {
-//   if(/^-/.test(arg)) {
-//     flags.push(arg.replaceAll("-", ""));
-//   }
-// });
-
-// console.log(flags);
-
-// if(flags.includes("a") || flags.includes("add")) {
-//   console.log("add some values");
-// } else {
-//   console.log("Do some work");
-// }
-
-// console.log(process.argv)
+function checkAnswer(input, answer) {
+  if (input === answer) {
+    console.log("You got it right!");
+    return true;
+  } else {
+    console.log("Not this time.")
+    return false;
+  }
+} 

@@ -11,12 +11,8 @@
 //   }
 //   console.log(JSON.parse(contents.toString()))
 // })
-import fs from "fs/promises";
+// import fs from "fs/promises";
 
-try {
   const contents = await fs.readFile("./data.json");
   console.log(JSON.parse(contents.toString()));
-} catch (error) {
-  console.log(error);
-  process.exit(1);
-}
+
