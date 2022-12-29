@@ -4,18 +4,18 @@ import inquirer from "inquirer";
 import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { parseArgs } from "node:util";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const dataFile = join(__dirname, "data.json");
 
-const flags = [];
-process.argv.forEach((arg) => {
-  if (/^-/.test(arg)) {
-    flags.push(arg.replaceAll("-", ""));
-  }
-});
+const options = { add: { type: "boolean", short: "a" } };
 
-if (flags.includes("a") || flags.includes("add")) {
+const {
+  values: { add },
+} = parseArgs({ options });
+
+if (add) {
   addQuestion();
 } else {
   askQuestion();
