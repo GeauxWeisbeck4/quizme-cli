@@ -1,0 +1,13 @@
+{
+  "name": "node-2cemqp",
+  "version": "0.0.1",
+  "description": "An application for spaced repitition.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo"
+  },
+  "keywords": [],
+  "author": "Andrew Weisbeck",
+  "licesne": "MIT",
+  "type": "module"
+}
